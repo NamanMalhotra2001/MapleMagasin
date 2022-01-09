@@ -22,6 +22,15 @@ mongoose
 	.then(() => console.log('Database connected.'))
 	.catch((err) => console.log('\n!! ' + err + ' !!'));
 
+app.use(function (req, res, next) {
+	res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept'
+	);
+	next();
+});
+
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/products', productRoute);

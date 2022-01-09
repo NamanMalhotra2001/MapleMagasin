@@ -1,26 +1,85 @@
 import styled from 'styled-components';
-import { popularProducts } from '../data';
+import axios from 'axios';
 
 // Icons
 import { BsCartPlus, BsHeart, BsInfoCircle } from 'react-icons/bs';
+import { useEffect, useState } from 'react';
 
-const Products = () => {
+const Products = ({ category, filters, sort }) => {
+	//  ########## states ##########
+	const [products, setProducts] = useState([]);
+	const [filteredProducts, setFilteredProducts] = useState([]);
+
+	//  ########## fetching data ##########
+	useEffect(() => {
+		const getProducts = async () => {
+			try {
+				const res = await axios.get(
+					category
+						? `http://localhost:5000/api/products/all?category=${category}`
+						: `http://localhost:5000/api/products/all`
+				);
+				setProducts(res.data);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getProducts();
+	}, [category]);
+
+	useEffect(() => {
+		category &&
+			setFilteredProducts(
+				products.filter((item) =>
+					Object.entries(filters).every(([key, value]) =>
+						item[key].includes(value)
+					)
+				)
+			);
+	}, [products, category, filters]);
+
+	useEffect(() => {
+		if (sort === 'newest') {
+			setFilteredProducts((prev) =>
+				[...prev].sort((a, b) => a.createdAt - b.createdAt)
+			);
+		} else if (sort === 'asc') {
+			setFilteredProducts((prev) =>
+				[...prev].sort((a, b) => a.prices - b.prices)
+			);
+		} else {
+			setFilteredProducts((prev) =>
+				[...prev].sort((a, b) => b.createdAt - a.createdAt)
+			);
+		}
+	}, [sort]);
+
+	let mappableProducts;
+	if (category && filteredProducts.length < 1) {
+		mappableProducts = filteredProducts;
+	} else {
+		mappableProducts = products.slice(0, 11);
+	}
+
 	return (
 		<Wrapper>
-			{popularProducts.map((item) => (
-				<Container key={item.id}>
-					<Circle />
+			{mappableProducts.map((item, k) => (
+				<Container key={k}>
+					<Title>{item.title}</Title>
+					<BackgroundCircle />
 					<Image src={item.img} />
 					<Info>
-						<Icon>
-							<BsCartPlus />
-						</Icon>
-						<Icon>
-							<BsInfoCircle />
-						</Icon>
-						<Icon>
-							<BsHeart />
-						</Icon>
+						<IconContainer>
+							<Icon>
+								<BsCartPlus />
+							</Icon>
+							<Icon>
+								<BsInfoCircle />
+							</Icon>
+							<Icon>
+								<BsHeart />
+							</Icon>
+						</IconContainer>
 					</Info>
 				</Container>
 			))}
@@ -31,6 +90,15 @@ const Products = () => {
 export default Products;
 
 // ########### styled components ###########
+const Title = styled.h2`
+	position: absolute;
+	top: 1rem;
+	left: 2rem;
+	z-index: 10;
+	transition: all 0.3s;
+	border-radius: 1rem;
+`;
+
 const Info = styled.div`
 	border-radius: 1rem;
 	opacity: 0;
@@ -64,9 +132,15 @@ const Container = styled.div`
 	&:hover ${Info} {
 		opacity: 1;
 	}
+
+	:hover ${Title} {
+		background-color: #f5f5f5d1;
+		padding: 1rem;
+		margin-right: 2rem;
+	}
 `;
 
-const Circle = styled.div`
+const BackgroundCircle = styled.div`
 	width: 15rem;
 	height: 15rem;
 	border-radius: 50%;
@@ -79,19 +153,27 @@ const Image = styled.img`
 	z-index: 2;
 `;
 
-const Icon = styled.div`
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
+const IconContainer = styled.div`
+	margin-top: 8rem;
+	display: flex;
+`;
+
+const Icon = styled.button`
+	cursor: pointer;
+	border: none;
+	width: 3rem;
+	height: 2rem;
+	border-radius: 0.4rem;
 	background-color: white;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: 10px;
-	transition: all 0.2s ease;
+	margin: 1rem;
+	transform: scale(1.3);
+	transition: all 0.3s ease;
+
 	&:hover {
-		background-color: #e9f5f5;
-		transform: scale(1.2);
+		transform: scale(1.5);
 	}
 `;
 

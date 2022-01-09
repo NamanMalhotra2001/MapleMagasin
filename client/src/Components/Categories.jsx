@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { categories } from '../data';
 
@@ -9,7 +10,9 @@ const Categories = () => {
 					<Image src={item.img} />
 					<Info>
 						<Title>{item.title}</Title>
-						<Button>SHOP NOW</Button>
+						<Link to={`/products/${item.cat}`}>
+							<Button>SHOP NOW</Button>
+						</Link>
 					</Info>
 				</Container>
 			))}
@@ -21,7 +24,7 @@ export default Categories;
 
 // ########### styled components ###########
 const Button = styled.button`
-	opacity: 20%;
+	opacity: 0;
 	cursor: pointer;
 	font-size: 1rem;
 	font-weight: bold;
@@ -31,7 +34,7 @@ const Button = styled.button`
 	max-width: 20rem;
 	background-color: #ddfffb;
 	border: solid #ddfffb 1px;
-	transition: 0.3s;
+	transition: 0.4s;
 
 	:hover {
 		margin-top: 1rem;
@@ -61,6 +64,7 @@ const Title = styled.h1`
 	color: white;
 	margin-bottom: 1.5rem;
 	font-family: var(--font5);
+	text-align: center;
 	font-size: 3vw;
 	transition: 0.5s;
 `;
@@ -76,7 +80,7 @@ const Container = styled.div`
 	border-radius: 1rem;
 	flex: 1;
 	margin: 5px;
-	height: 70vh;
+	height: 40vw;
 	position: relative;
 	&:hover ${Title} {
 		text-shadow: 5px 5px 5px #000000;

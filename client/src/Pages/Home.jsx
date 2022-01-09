@@ -8,7 +8,7 @@ import Newsletter from '../Components/Newsletter';
 
 const Home = () => {
 	return (
-		<div style={{ maxHeight: 'var(--maxHeight)', overflowY: 'auto' }}>
+		<div /* style={{ maxHeight: 'var(--maxHeight)', overflowY: 'auto' }} */>
 			<Slider />
 			<h1
 				style={{

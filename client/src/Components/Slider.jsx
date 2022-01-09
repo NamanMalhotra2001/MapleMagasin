@@ -8,14 +8,12 @@ function Slider() {
 
 	function handleArrowClick(direction) {
 		if (direction === 'left') {
-			console.log('left');
 			if (slideIndex === 0) {
 				setSlideIndex(sliderItems.length - 1);
 			} else {
 				setSlideIndex((prev) => prev - 1);
 			}
 		} else {
-			console.log('right');
 			if (slideIndex === sliderItems.length - 1) {
 				setSlideIndex(0);
 			} else {

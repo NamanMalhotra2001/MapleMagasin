@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // icons
@@ -6,6 +7,7 @@ import { BiCart, BiSearchAlt } from 'react-icons/bi';
 import maple from '../Pictures/maple-leaf.png';
 
 const NavBar = () => {
+	let navigate = useNavigate();
 	return (
 		<Wrapper>
 			<Left>
@@ -14,12 +16,16 @@ const NavBar = () => {
 					<input placeholder='Search store' />
 				</SearchContainer>
 			</Left>
-			<Logo>
+			<Logo
+				onClick={() => {
+					navigate('/');
+				}}
+			>
 				<img src={maple} alt='maple' className='logoImage' />
 				MapelMagasin
 			</Logo>
 			<Right>
-				<Button>SignIn</Button>
+				<Button>Sign in</Button>
 				<Button>
 					<BiCart className='icon' />
 					<Badge />
@@ -64,6 +70,7 @@ export const Left = styled.div`
 `;
 
 export const Logo = styled.div`
+	cursor: pointer;
 	flex: 1;
 	display: flex;
 	align-items: center;
